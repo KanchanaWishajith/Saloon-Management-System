@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const protect = require('./middleware/authMiddleware');
+const serviceRoutes = require('./routes/serviceRoutes');
 
 // Load env variables
 dotenv.config();
@@ -24,6 +25,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/services', serviceRoutes);
 
 // Protected route
 app.get('/api/protected', protect, (req, res) => {
