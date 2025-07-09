@@ -6,6 +6,7 @@ const authRoutes = require('./routes/authRoutes');
 const protect = require('./middleware/authMiddleware');
 const serviceRoutes = require('./routes/serviceRoutes');
 const appointmentRoutes = require('./routes/appointmentRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 
 // Load env variables
 dotenv.config();
@@ -28,6 +29,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/appointments', appointmentRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // Protected route
 app.get('/api/protected', protect, (req, res) => {
