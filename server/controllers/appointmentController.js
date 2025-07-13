@@ -3,12 +3,12 @@ const Appointment = require('../models/Appointment');
 // ✅ Book an appointment (customer)
 exports.bookAppointment = async (req, res) => {
   try {
-    const { service, appointmentDate } = req.body;
+    const { serviceId, date } = req.body;
 
     const newAppointment = new Appointment({
-      user: req.user.userId,       // from token
-      service,
-      appointmentDate
+      user: req.user.userId, // from token
+      service: serviceId,
+      appointmentDate: date
     });
 
     await newAppointment.save();
@@ -17,6 +17,7 @@ exports.bookAppointment = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
+
 
 // 👤 Get current user's appointments
 exports.getUserAppointments = async (req, res) => {
