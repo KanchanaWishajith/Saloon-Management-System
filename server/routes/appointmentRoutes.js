@@ -5,7 +5,8 @@ const {
   bookAppointment,
   getUserAppointments,
   getAllAppointments,
-  cancelAppointment
+  cancelAppointment,
+  updateAppointmentStatus
 } = require('../controllers/appointmentController');
 
 const protect = require('../middleware/authMiddleware');
@@ -22,5 +23,7 @@ router.get('/', protect, adminOnly, getAllAppointments);
 
 // ❌ Cancel an appointment (customer or admin)
 router.put('/cancel/:id', protect, cancelAppointment);
+
+router.put('/status/:id', protect, adminOnly, updateAppointmentStatus);
 
 module.exports = router;

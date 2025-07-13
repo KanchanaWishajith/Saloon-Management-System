@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -16,9 +18,16 @@ const Login = () => {
       });
 
       setMessage('✅ Login successful!');
-      localStorage.setItem('token', res.data.token); // Store token
+      localStorage.setItem('token', res.data.token);
+
+      // ✅ Role-based redirection
+      if (res.data.user.role === 'admin') {
+        navigate('/admin/dashboard'); // ✅ lowercase
+      } else {
+        navigate('/profile'); // ✅ lowercase
+      }
     } catch (error) {
-      setMessage('❌ ' + error.response.data.message || 'Login failed');
+      setMessage('❌ ' + (error.response?.data?.message || 'Login failed'));
     }
   };
 

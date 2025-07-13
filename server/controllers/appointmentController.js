@@ -32,7 +32,13 @@ exports.getUserAppointments = async (req, res) => {
 // 👨‍💼 Admin: Get all appointments
 exports.getAllAppointments = async (req, res) => {
   try {
-    const appointments = await Appointment.find().populate('service user');
+    const { status, userId } = req.query;
+
+    let filter = {};
+    if (status) filter.status = status;
+    if (userId) filter.user = userId;
+
+    const appointments = await Appointment.find(filter).populate('service user');
     res.status(200).json(appointments);
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });
@@ -55,3 +61,22 @@ exports.cancelAppointment = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
+
+// Update appointment status (admin only)
+exports.updateAppointmentStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body; // expected: 'approved', 'cancelled', 'pending', etc.
+
+    const appointment = await Appointment.findById(id);
+    if (!appointment) return res.status(404).json({ message: 'Appointment not found' });
+
+    appointment.status = status;
+    await appointment.save();
+
+    res.status(200).json({ message: 'Appointment status updated', appointment });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
