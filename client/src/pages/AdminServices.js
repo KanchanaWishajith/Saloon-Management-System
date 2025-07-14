@@ -111,7 +111,7 @@ const AdminServices = () => {
         {services.map((s) => (
           <li key={s._id}>
             <strong>{s.name}</strong> - Rs.{s.price}
-            <p>Duration: {s.duration}</p>
+            <p>Duration: {s.duration} minutes</p>
             <p>{s.description}</p>
             <button onClick={() => handleEdit(s)}>Edit</button>
             <button onClick={() => handleDelete(s._id)}>Delete</button>
