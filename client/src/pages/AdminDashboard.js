@@ -71,6 +71,7 @@ const AdminDashboard = () => {
           ))}
         </ul>
       )}
+      <a href="/admin/services">🔧 Manage Services</a>
     </div>
   );
 };
