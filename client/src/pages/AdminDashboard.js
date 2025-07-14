@@ -66,6 +66,9 @@ const AdminDashboard = () => {
               {appt.status !== 'cancelled' && (
                 <button onClick={() => updateStatus(appt._id, 'cancelled')}>Cancel</button>
               )}
+              {appt.status !== 'completed' && (
+                <button onClick={() => updateStatus(appt._id, 'completed')}>Completed</button>
+              )}
               <hr />
             </li>
           ))}

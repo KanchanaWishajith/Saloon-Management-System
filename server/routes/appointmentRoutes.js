@@ -24,6 +24,8 @@ router.get('/', protect, adminOnly, getAllAppointments);
 // ❌ Cancel an appointment (customer or admin)
 router.put('/cancel/:id', protect, cancelAppointment);
 
+// router.put('/approve/:id', protect, adminOnly, approveAppointment);
+
 router.put('/status/:id', protect, adminOnly, updateAppointmentStatus);
 
 module.exports = router;

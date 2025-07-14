@@ -66,17 +66,22 @@ exports.cancelAppointment = async (req, res) => {
 exports.updateAppointmentStatus = async (req, res) => {
   try {
     const { id } = req.params;
-    const { status } = req.body; // expected: 'approved', 'cancelled', 'pending', etc.
+    const { status } = req.body;
+
+    if (!['approved', 'cancelled','completed'].includes(status)) {
+      return res.status(400).json({ message: 'Invalid status value' });
+    }
 
     const appointment = await Appointment.findById(id);
-    if (!appointment) return res.status(404).json({ message: 'Appointment not found' });
+    if (!appointment) {
+      return res.status(404).json({ message: 'Appointment not found' });
+    }
 
     appointment.status = status;
     await appointment.save();
 
-    res.status(200).json({ message: 'Appointment status updated', appointment });
+    res.status(200).json({ message: `Appointment ${status}`, appointment });
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
-
