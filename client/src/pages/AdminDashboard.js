@@ -3,10 +3,13 @@ import axios from 'axios';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 const AdminDashboard = () => {
   const [appointments, setAppointments] = useState([]);
   const [stats, setStats] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -74,6 +77,12 @@ const AdminDashboard = () => {
     }
   };
 
+    // Filter appointments for the selected day
+  const dailyAppointments = appointments.filter(
+    (appt) =>
+      new Date(appt.appointmentDate).toDateString() === selectedDate.toDateString()
+  );
+
   return (
     <div>
       <h2>🛠️ Admin Dashboard</h2>
@@ -124,6 +133,31 @@ const AdminDashboard = () => {
               <Bar dataKey="count" fill="#8884d8" />
             </BarChart>
           </ResponsiveContainer>
+
+                <h2>🗓️ My Appointment Calendar</h2>
+      <Calendar
+        onChange={setSelectedDate}
+        value={selectedDate}
+        tileClassName={({ date, view }) => {
+          const isBooked = appointments.some(
+            (appt) =>
+              new Date(appt.appointmentDate).toDateString() === date.toDateString()
+          );
+          return isBooked ? 'highlight' : null;
+        }}
+      />
+      <h3>📅 Appointments on {selectedDate.toDateString()}</h3>
+      {dailyAppointments.length === 0 ? (
+        <p>No appointments on this day.</p>
+      ) : (
+        <ul>
+          {dailyAppointments.map((appt) => (
+            <li key={appt._id}>
+              {appt.user?.name} - {appt.service?.name} at {new Date(appt.appointmentDate).toLocaleTimeString()}
+            </li>
+          ))}
+        </ul>
+      )}
 
         </ul>
 

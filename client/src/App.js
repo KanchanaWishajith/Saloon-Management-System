@@ -10,6 +10,7 @@ import MyAppointments from './pages/MyAppointments';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminServices from './pages/AdminServices';
 import AdminAppointments from './pages/AdminAppointments';
+import CalendarView from './pages/CalendarView';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/services" element={<AdminServices />} />
         <Route path="/admin/appointments" element={<AdminAppointments />} />
+        <Route path="/calendar" element={<CalendarView />} />
 
       </Routes>
     </Router>
