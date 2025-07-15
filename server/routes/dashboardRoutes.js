@@ -6,5 +6,6 @@ const adminOnly = require('../middleware/adminMiddleware');
 
 // 🔐 Admin dashboard stats
 router.get('/', protect, adminOnly, getDashboardStats);
+router.get('/stats', protect, adminOnly, getDashboardStats);
 
 module.exports = router;

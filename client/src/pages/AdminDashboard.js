@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
+} from 'recharts';
 
 const AdminDashboard = () => {
   const [appointments, setAppointments] = useState([]);
+  const [stats, setStats] = useState(null);
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -21,6 +25,30 @@ const AdminDashboard = () => {
 
     fetchAppointments();
   }, []);
+
+      useEffect(() => {
+    const fetchStats = async () => {
+      const token = localStorage.getItem('token');
+      try {
+        const res = await axios.get('http://localhost:5000/api/dashboard/stats', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setStats(res.data);
+      } catch (err) {
+        console.error('Failed to fetch dashboard stats', err);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+    const chartData = stats
+    ? [
+        { name: 'Completed', count: stats.statusCounts.completed },
+        { name: 'Approved', count: stats.statusCounts.approved },
+        { name: 'Cancelled', count: stats.statusCounts.cancelled },
+      ]
+    : [];
 
   const updateStatus = async (id, status) => {
     try {
@@ -75,6 +103,34 @@ const AdminDashboard = () => {
         </ul>
       )}
       <a href="/admin/services">🔧 Manage Services</a>
+            <h2>📊 Admin Dashboard Summary</h2>
+      {stats ? (
+        <ul>
+          <li>Total Appointments: {stats.totalAppointments}</li>
+          <li>Total Users: {stats.totalUsers}</li>
+          <li>Total Services: {stats.totalServices}</li>
+          <li>completed: {stats.statusCounts.completed}</li>
+          <li>Approved: {stats.statusCounts.approved}</li>
+          <li>Cancelled: {stats.statusCounts.cancelled}</li>
+
+          <h3>📈 Appointment Status Overview</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis allowDecimals={false} />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="count" fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
+
+        </ul>
+
+      ) : (
+        <p>Loading stats...</p>
+      )}
+
     </div>
   );
 };
