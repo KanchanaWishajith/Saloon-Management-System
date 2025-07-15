@@ -12,6 +12,7 @@ import AdminServices from './pages/AdminServices';
 import AdminAppointments from './pages/AdminAppointments';
 import CalendarView from './pages/CalendarView';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/calendar" element={<CalendarView />} />
 
       </Routes>
+      <Footer />
     </Router>
   );
 }
