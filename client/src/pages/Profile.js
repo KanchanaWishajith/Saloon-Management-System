@@ -24,17 +24,20 @@ const Profile = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Profile Page</h2>
-      {user ? (
-        <div>
-          <p><strong>Name:</strong> {user.name}</p>
-          <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>Role:</strong> {user.role}</p>
-        </div>
-      ) : (
-        <p>{message || 'Loading...'}</p>
-      )}
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-6 text-center">👤 Profile Page</h2>
+
+        {user ? (
+          <div className="space-y-4">
+            <p><strong className="text-gray-600">Name:</strong> {user.name}</p>
+            <p><strong className="text-gray-600">Email:</strong> {user.email}</p>
+            <p><strong className="text-gray-600">Role:</strong> {user.role}</p>
+          </div>
+        ) : (
+          <p className="text-center text-red-500">{message || 'Loading...'}</p>
+        )}
+      </div>
     </div>
   );
 };
