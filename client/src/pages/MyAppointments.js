@@ -22,48 +22,53 @@ const MyAppointments = () => {
     fetchAppointments();
   }, []);
 
-const handleCancel = async (id) => {
-  try {
-    const token = localStorage.getItem('token');
-    const res = await axios.put(
-      `http://localhost:5000/api/appointments/cancel/${id}`,
-      {},
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+  const handleCancel = async (id) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await axios.put(
+        `http://localhost:5000/api/appointments/cancel/${id}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
-    // Update the appointment's status locally
-    setAppointments((prev) =>
-      prev.map((a) => (a._id === id ? { ...a, status: 'cancelled' } : a))
-    );
-  } catch (err) {
-    console.error('Cancel failed:', err);
-  }
-};
-
-
+      setAppointments((prev) =>
+        prev.map((a) => (a._id === id ? { ...a, status: 'cancelled' } : a))
+      );
+    } catch (err) {
+      console.error('Cancel failed:', err);
+    }
+  };
 
   return (
-    <div>
-      <h2>📅 My Appointments</h2>
-      {appointments.length === 0 ? (
-        <p>No appointments yet.</p>
-      ) : (
-        <ul>
-          {appointments.map((appt) => (
-            <li key={appt._id}>
-            <h4>{appt.service?.name}</h4>
-            <p><strong>Date:</strong> {new Date(appt.appointmentDate).toLocaleString()}</p>
-            <p><strong>Price:</strong> Rs.{appt.service?.price}</p>
-            <p><strong>Status:</strong> {appt.status}</p>
-            {appt.status !== 'cancelled' && (
-            <button onClick={() => handleCancel(appt._id)}>Cancel</button>
-            )}
-        <hr />
-        </li>
-    ))}
+    <div className="max-w-3xl mx-auto bg-white mt-10 p-8 rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold mb-6 text-center">📅 My Appointments</h2>
 
+      {appointments.length === 0 ? (
+        <p className="text-center text-gray-500">No appointments yet.</p>
+      ) : (
+        <ul className="space-y-6">
+          {appointments.map((appt) => (
+            <li key={appt._id} className="border-b pb-4">
+              <h4 className="text-xl font-semibold text-blue-600">{appt.service?.name}</h4>
+              <p><strong>Date:</strong> {new Date(appt.appointmentDate).toLocaleString()}</p>
+              <p><strong>Price:</strong> Rs.{appt.service?.price}</p>
+              <p><strong>Status:</strong> 
+                <span className={`ml-2 px-2 py-1 rounded text-white text-sm ${appt.status === 'cancelled' ? 'bg-red-500' : appt.status === 'approved' ? 'bg-green-600' : 'bg-yellow-500'}`}>
+                  {appt.status}
+                </span>
+              </p>
+              {appt.status !== 'cancelled' && (
+                <button
+                  onClick={() => handleCancel(appt._id)}
+                  className="mt-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
+                >
+                  Cancel
+                </button>
+              )}
+            </li>
+          ))}
         </ul>
       )}
     </div>
