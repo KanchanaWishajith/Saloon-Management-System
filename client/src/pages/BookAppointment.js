@@ -19,7 +19,6 @@ const BookAppointment = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-
       const res = await axios.post(
         'http://localhost:5000/api/appointments',
         { serviceId: selectedService, date },
@@ -29,7 +28,6 @@ const BookAppointment = () => {
           },
         }
       );
-
       setMessage('✅ Appointment booked successfully!');
     } catch (error) {
       setMessage('❌ Booking failed: ' + (error.response?.data?.message || 'Server error'));
@@ -37,25 +35,45 @@ const BookAppointment = () => {
   };
 
   return (
-    <div>
-      <h2>Book an Appointment 🗓️</h2>
-      <form onSubmit={handleBooking}>
-        <label>Select a Service:</label><br />
-        <select value={selectedService} onChange={(e) => setSelectedService(e.target.value)} required>
-          <option value="">-- Choose --</option>
-          {services.map((s) => (
-            <option key={s._id} value={s._id}>
-              {s.name} - Rs.{s.price}
-            </option>
-          ))}
-        </select><br /><br />
+    <div className="max-w-md mx-auto bg-white mt-10 p-8 rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold text-center mb-6">🗓️ Book an Appointment</h2>
+      <form onSubmit={handleBooking} className="space-y-4">
+        <div>
+          <label className="block font-medium mb-1">Select a Service:</label>
+          <select
+            value={selectedService}
+            onChange={(e) => setSelectedService(e.target.value)}
+            required
+            className="w-full border border-gray-300 p-2 rounded"
+          >
+            <option value="">-- Choose --</option>
+            {services.map((s) => (
+              <option key={s._id} value={s._id}>
+                {s.name} - Rs.{s.price}
+              </option>
+            ))}
+          </select>
+        </div>
 
-        <label>Select Date:</label><br />
-        <input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} required /><br /><br />
+        <div>
+          <label className="block font-medium mb-1">Select Date & Time:</label>
+          <input
+            type="datetime-local"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            required
+            className="w-full border border-gray-300 p-2 rounded"
+          />
+        </div>
 
-        <button type="submit">Book</button>
+        <button
+          type="submit"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded"
+        >
+          Book Appointment
+        </button>
       </form>
-      <p>{message}</p>
+      {message && <p className="mt-4 text-center text-sm text-green-600">{message}</p>}
     </div>
   );
 };
