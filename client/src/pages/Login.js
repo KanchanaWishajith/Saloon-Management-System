@@ -19,6 +19,7 @@ const Login = () => {
 
       setMessage('✅ Login successful!');
       localStorage.setItem('token', res.data.token);
+      localStorage.setItem('role', res.data.user.role); 
 
       // ✅ Role-based redirection
       if (res.data.user.role === 'admin') {
